@@ -1,3 +1,5 @@
+@import views.editor.GenerateId
+
 @(id: String,
 required: Boolean, weight: Int, threshold: Double,
 plugin: org.silkframework.runtime.plugin.PluginDescription[_],
@@ -6,15 +8,30 @@ x: Int, y: Int, display: Boolean)
 
 @operatorBox("Compare", id, plugin, parameters, x, y, display) {
 <div class="param_element">
-  <span class="param_label">Required</span>
+  <label id="@GenerateId(id, display)_param_required" class="param_label">Required</label>
+  <div class="mdl-tooltip mdl-tooltip--right" for="@GenerateId(id, display)_param_required">
+    Reise Tristan, schedelîchem welle iuch serpande sol vride sterkete, lant sone sô, diz swuor.
+    Manz den er wol des selbe komen maeres selbe. Anders daz erkande serpande der wîp, des
+    swuor überladen vil dâ lîp in.
+  </div>
   <input type="checkbox" name="required" @if(required) {checked="checked"}/>
 </div>
 <div class="param_element">
-  <label class="param_label">Threshold</label>
+  <label id="@GenerateId(id, display)_param_threshold" class="param_label">Threshold</label>
+  <div class="mdl-tooltip mdl-tooltip--right" for="@GenerateId(id, display)_param_threshold">
+    Reise Tristan, schedelîchem welle iuch serpande sol vride sterkete, lant sone sô, diz swuor.
+    Manz den er wol des selbe komen maeres selbe. Anders daz erkande serpande der wîp, des
+    swuor überladen vil dâ lîp in.
+  </div>
   <input class="param_value" type="text" name="threshold" value="@threshold"/>
 </div>
 <div class="param_element">
- <label class="param_label">Weight</label>
+  <label id="@GenerateId(id, display)_param_weight" class="param_label">Weight</label>
+  <div class="mdl-tooltip mdl-tooltip--right" for="@GenerateId(id, display)_param_weight">
+    Reise Tristan, schedelîchem welle iuch serpande sol vride sterkete, lant sone sô, diz swuor.
+    Manz den er wol des selbe komen maeres selbe. Anders daz erkande serpande der wîp, des
+    swuor überladen vil dâ lîp in.
+  </div>
   <input class="param_value" type="text" name="weight" value="@weight"/>
 </div>
 }

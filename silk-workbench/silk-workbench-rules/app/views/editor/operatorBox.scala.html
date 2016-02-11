@@ -31,7 +31,12 @@
     @additionalContent
     @for(((name, value), index) <- parameters.zipWithIndex) {
       <div class="param_element">
-        <label class="param_label">@name</label>
+        <label id="@GenerateId(id, display)_param_@name" class="param_label">@name</label>
+        <div class="mdl-tooltip mdl-tooltip--right" for="@GenerateId(id, display)_param_@name">
+          Reise Tristan, schedelîchem welle iuch serpande sol vride sterkete, lant sone sô, diz swuor.
+          Manz den er wol des selbe komen maeres selbe. Anders daz erkande serpande der wîp, des
+          swuor überladen vil dâ lîp in.
+        </div>
         <input class="param_value" type="text" name="@name" value="@value"/>
       </div>
     }
