@@ -67,7 +67,7 @@ var endpointValueSource = {
   endpoint: "Dot",
   paintStyle: {
     fillStyle: "#3187CF",
-    radius: 4
+    radius: 6
   },
   connectorStyle: valueConnectorStyle,
   connectorHoverStyle: valueConnectorHoverStyle,
@@ -82,7 +82,7 @@ var endpointValueTarget = {
   endpoint: "Dot",
   paintStyle: {
     fillStyle: "#3187CF",
-    radius: 4
+    radius: 6
   },
   connectorStyle: valueConnectorStyle,
   isTarget: true,
@@ -95,7 +95,7 @@ var endpointSimilaritySource = {
   endpoint: "Dot",
   paintStyle: {
     fillStyle: "#BF5741",
-    radius: 4
+    radius: 6
   },
   connectorStyle: similarityConnectorStyle,
   connectorHoverStyle: similarityConnectorHoverStyle,
@@ -110,7 +110,7 @@ var endpointSimilarityTarget = {
   endpoint: "Dot",
   paintStyle: {
     fillStyle: "#BF5741",
-    radius: 4
+    radius: 6
   },
   connectorStyle: similarityConnectorStyle,
   isTarget: true,
