@@ -236,15 +236,6 @@ $(function ()
     $(this).parent().removeClass('active').attr('title', newPath).html(newPath);
   });
 
-  $(document).on('mouseover', "#source_restriction, #target_restriction", function() {
-    var txt = $(this).text();
-    Tip(txt, DELAY, 20);
-  });
-
-  $(document).on('mouseout', "#source_restriction, #target_restriction", function() {
-    UnTip();
-  });
-
   updateScore();
 
 });
@@ -416,8 +407,11 @@ function highlightElement(elId, message) {
     if (elId.length == $(this).text().length) elementToHighlight = $(this).parent().parent();
   });
   if (!elementToHighlight) elementToHighlight = $("#" + elId);
-  elementToHighlight.addClass('highlighted').attr('onmouseover', 'Tip("' + encodeHtml(message) + '")').attr("onmouseout", "UnTip()");
+  elementToHighlight.addClass('highlighted');//.attr('onmouseover', 'Tip("' + encodeHtml(message) + '")').attr("onmouseout", "UnTip()");
+  elementToHighlight.prepend('<div class="mdl-tooltip" for="' + elId + '">foo bar</div>');
   jsPlumb.repaint(elementToHighlight);
+  //componentHandler.upgradeElement(elementToHighlight[0]);
+  componentHandler.upgradeAllRegistered();
 }
 
 function removeHighlighting() {
