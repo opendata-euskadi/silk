@@ -140,6 +140,7 @@ $(function ()
 
         // Set operator name to current id
         $('#' + boxid + " .handler label").text(boxid);
+        $('#' + boxid + " .handler input").val(boxid);
 
         // Make operator draggable
         jsPlumb.draggable($('#' + boxid));
