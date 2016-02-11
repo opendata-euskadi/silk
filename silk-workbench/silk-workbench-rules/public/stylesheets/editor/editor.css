@@ -109,9 +109,11 @@ body{
   color: #1484d4;
 }
 
+/*
 ._jsPlumb_endpoint {
   z-index: 2;
 }
+*/
 
 ._jsPlumb_connector {
   cursor: pointer;
