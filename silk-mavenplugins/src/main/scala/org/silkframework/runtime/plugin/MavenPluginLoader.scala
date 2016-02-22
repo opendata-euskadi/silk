@@ -3,6 +3,7 @@ package org.silkframework.runtime.plugin
 import java.io.File
 import java.net.{URL, URLClassLoader}
 import org.silkframework.config.Config
+import org.silkframework.util.Timer
 
 import scala.collection.JavaConversions._
 
@@ -29,10 +30,21 @@ object MavenPluginLoader {
 
   private val session = newSession(repoSystem)
 
-  registerPlugins(Seq(new DefaultArtifact("org.silkframework", "silk-plugins-spatialtemporal_2.11", "jar", "2.7.0")))
-
-  def registerPlugins(): Unit = {
-    // TODO load from configuration Config().atPath("plugins")
+  /**
+    * Registers all plugins that are configured at 'org.silkframework.runtime.plugin.remote'.
+    */
+  def registerPlugins(): Unit = Timer("Registering remote plugins") {
+    val artifactConfigs = Config().getConfigList("org.silkframework.runtime.plugin.remote")
+    val artifacts =
+      for(config <- artifactConfigs) yield {
+        new DefaultArtifact(
+          config.getString("group") ,
+          config.getString("artifact"),
+          "jar",
+          config.getString("version")
+        )
+      }
+    registerPlugins(artifacts)
   }
 
   /**
