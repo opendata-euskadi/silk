@@ -2,10 +2,12 @@ package org.silkframework.runtime.plugin
 
 import java.io.File
 import java.net.{URL, URLClassLoader}
+import org.silkframework.config.Config
+
 import scala.collection.JavaConversions._
 
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils
-import org.eclipse.aether.artifact.DefaultArtifact
+import org.eclipse.aether.artifact.{Artifact, DefaultArtifact}
 import org.eclipse.aether.collection.CollectRequest
 import org.eclipse.aether.connector.basic.BasicRepositoryConnectorFactory
 import org.eclipse.aether.graph.Dependency
@@ -18,14 +20,37 @@ import org.eclipse.aether.transport.http.HttpTransporterFactory
 import org.eclipse.aether.util.graph.visitor.PreorderNodeListGenerator
 import org.eclipse.aether.{RepositorySystem, RepositorySystemSession}
 
-object MavenLoader {
+/**
+  * Loads plugins from Maven.
+  */
+object MavenPluginLoader {
 
   private val repoSystem = newRepositorySystem
 
   private val session = newSession(repoSystem)
 
-  def load() = {
-    val artifact = new DefaultArtifact("org.silkframework", "silk-plugins-spatialtemporal_2.11", "jar", "2.7.0")
+  registerPlugins(Seq(new DefaultArtifact("org.silkframework", "silk-plugins-spatialtemporal_2.11", "jar", "2.7.0")))
+
+  def registerPlugins(): Unit = {
+    // TODO load from configuration Config().atPath("plugins")
+  }
+
+  /**
+    * Registers all plugins contained in a set of (Maven) artifacts.
+    */
+  private def registerPlugins(artifacts: Seq[Artifact]): Unit = {
+    val urls = artifacts.flatMap(load).distinct
+
+    val classLoader = new URLClassLoader(urls.toArray, getClass.getClassLoader)
+    PluginRegistry.registerFromClasspath(classLoader)
+  }
+
+  /**
+    * Resolves an artifact.
+    *
+    * @return The URL of the artifact and all of its dependencies.
+    */
+  private def load(artifact: Artifact): Seq[URL] = {
     val dependency = new Dependency(artifact, "compile")
 
     // val central = new RemoteRepository.Builder("central", "default", "http://repo1.maven.org/maven2/").build()
@@ -33,7 +58,7 @@ object MavenLoader {
     val collectRequest = new CollectRequest()
     collectRequest.setRoot(dependency)
     // collectRequest.addRepository(central)
-    val node = repoSystem.collectDependencies( session, collectRequest ).getRoot
+    val node = repoSystem.collectDependencies(session, collectRequest).getRoot
 
     val dependencyRequest = new DependencyRequest()
     dependencyRequest.setRoot(node)
@@ -44,8 +69,7 @@ object MavenLoader {
     node.accept(nlg)
     // System.out.println(nlg.getClassPath)
 
-    val classLoader = new URLClassLoader(nlg.getFiles.map(_.toURI.toURL).toArray, getClass.getClassLoader)
-    PluginRegistry.registerFromClasspath(classLoader)
+    nlg.getFiles.map(_.toURI.toURL)
   }
 
 
@@ -67,6 +91,4 @@ object MavenLoader {
 
     session
   }
-
-
 }
