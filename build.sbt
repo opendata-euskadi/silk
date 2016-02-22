@@ -47,6 +47,23 @@ lazy val workspace = (project in file("silk-workspace"))
     name := "Silk Workspace"
   )
 
+lazy val mavenPlugins = (project in file("silk-mavenplugins"))
+  .dependsOn(core)
+  .settings(commonSettings: _*)
+  .settings(
+    name := "Silk MavenPlugins",
+    libraryDependencies += "org.eclipse.aether" % "aether-api" % "1.1.0",
+    libraryDependencies += "org.eclipse.aether" % "aether-transport-wagon" % "1.1.0",
+
+    libraryDependencies += "org.eclipse.aether" % "aether-transport-file" % "1.1.0",
+    libraryDependencies += "org.eclipse.aether" % "aether-transport-http" % "1.1.0",
+    libraryDependencies += "org.eclipse.aether" % "aether-connector-basic" % "1.1.0",
+
+    libraryDependencies += "org.apache.maven" % "maven-aether-provider" % "3.3.9",
+
+    libraryDependencies += "org.slf4j" % "slf4j-jdk14" % "1.7.13"
+  )
+
 //////////////////////////////////////////////////////////////////////////////
 // Plugins
 //////////////////////////////////////////////////////////////////////////////
