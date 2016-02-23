@@ -2,29 +2,32 @@ package org.silkframework.runtime.plugin
 
 import java.io.File
 import java.net.{URL, URLClassLoader}
-import org.silkframework.config.Config
-import org.silkframework.util.Timer
-
-import scala.collection.JavaConversions._
+import java.util.logging.Logger
 
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils
+import org.eclipse.aether._
 import org.eclipse.aether.artifact.{Artifact, DefaultArtifact}
 import org.eclipse.aether.collection.CollectRequest
 import org.eclipse.aether.connector.basic.BasicRepositoryConnectorFactory
 import org.eclipse.aether.graph.Dependency
-import org.eclipse.aether.repository.{LocalRepository, RemoteRepository}
+import org.eclipse.aether.repository.LocalRepository
 import org.eclipse.aether.resolution.DependencyRequest
 import org.eclipse.aether.spi.connector.RepositoryConnectorFactory
 import org.eclipse.aether.spi.connector.transport.TransporterFactory
 import org.eclipse.aether.transport.file.FileTransporterFactory
 import org.eclipse.aether.transport.http.HttpTransporterFactory
 import org.eclipse.aether.util.graph.visitor.PreorderNodeListGenerator
-import org.eclipse.aether.{RepositorySystem, RepositorySystemSession}
+import org.silkframework.config.Config
+import org.silkframework.util.Timer
+
+import scala.collection.JavaConversions._
 
 /**
   * Loads plugins from Maven.
   */
 object MavenPluginLoader {
+
+  private val log = Logger.getLogger(getClass.getName)
 
   private val repoSystem = newRepositorySystem
 
@@ -100,7 +103,23 @@ object MavenPluginLoader {
 
     val localRepo = new LocalRepository(new File(System.getProperty("user.home"), ".m2/repository"))
     session.setLocalRepositoryManager( system.newLocalRepositoryManager(session, localRepo))
-
+    session.setRepositoryListener(DownloadListener)
     session
+  }
+
+  /**
+    * Logs artifact downloads.
+    */
+  object DownloadListener extends AbstractRepositoryListener {
+
+    override def artifactDownloading(event: RepositoryEvent): Unit = {
+      val artifact = event.getArtifact.getGroupId + ":" + event.getArtifact.getArtifactId
+      val repository = event.getRepository.getId
+      // val rootTrace = Iterator.iterate(event.getTrace)(_.getParent).dropWhile(_.getParent != null).next()
+      // val rootArtifact = rootTrace.getData.asInstanceOf[DependencyRequest].getRoot.getArtifact
+      // val rootArtifactName = rootArtifact.getGroupId + ":" + rootArtifact.getArtifactId
+
+      log.info(s"Downloading Plugin dependency $artifact from $repository.")
+    }
   }
 }
