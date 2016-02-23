@@ -119,7 +119,7 @@ object MavenPluginLoader {
       // val rootArtifact = rootTrace.getData.asInstanceOf[DependencyRequest].getRoot.getArtifact
       // val rootArtifactName = rootArtifact.getGroupId + ":" + rootArtifact.getArtifactId
 
-      log.info(s"Downloading Plugin dependency $artifact from $repository.")
+      log.info(s"Downloading plugin dependency $artifact from $repository.")
     }
   }
 }
