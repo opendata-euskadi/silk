@@ -91,7 +91,7 @@
 }
 
 @renderRule(rule: TransformRule) = {
-<div class="mdl-card @{rule.typeString.toLowerCase}Mapping mdl-shadow--2dp">
+<div class="mdl-card @{rule.typeString.toLowerCase}Mapping mdl-shadow--2dp transformRule">
   <div class="mdl-card__title ruleTitle">
     <div class="rule-name">@rule.name</div>&nbsp;
     <div class="rule-type">(@rule.typeString Mapping)</div>
@@ -119,47 +119,47 @@
 
 @renderDirectRule(rule: DirectMapping) = {
   <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-    <input class="mdl-textfield__input" type="text" id="@{rule.name}-source" value="@rule.sourcePath.serializeSimplified(prefixes())">
+    <input class="mdl-textfield__input source" type="text" id="@{rule.name}-source" value="@rule.sourcePath.serializeSimplified(prefixes())">
     <label class="mdl-textfield__label" for="@{rule.name}-source">Source Path</label>
   </div>
   <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-    <input class="mdl-textfield__input" type="text" id="@{rule.name}-target" value="@rule.targetProperty.serialize(prefixes())">
+    <input class="mdl-textfield__input target" type="text" id="@{rule.name}-target" value="@rule.targetProperty.serialize(prefixes())">
     <label class="mdl-textfield__label" for="@{rule.name}-target">Target Path</label>
   </div>
 }
 
 @renderUriRule(rule: UriMapping) = {
   <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-    <input class="mdl-textfield__input" type="text" id="@{rule.name}-pattern" value="@rule.pattern">
+    <input class="mdl-textfield__input pattern" type="text" id="@{rule.name}-pattern" value="@rule.pattern">
     <label class="mdl-textfield__label" for="@{rule.name}-pattern">Pattern</label>
   </div>
 }
 
 @renderObjectRule(rule: ObjectMapping) = {
   <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-    <input class="mdl-textfield__input" type="text" id="@{rule.name}-pattern" value="@rule.pattern">
+    <input class="mdl-textfield__input pattern" type="text" id="@{rule.name}-pattern" value="@rule.pattern">
     <label class="mdl-textfield__label" for="@{rule.name}-pattern">Pattern</label>
   </div>
   <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-    <input class="mdl-textfield__input" type="text" id="@{rule.name}-target" value="@rule.targetProperty.serialize(prefixes())">
+    <input class="mdl-textfield__input target" type="text" id="@{rule.name}-target" value="@rule.targetProperty.serialize(prefixes())">
     <label class="mdl-textfield__label" for="@{rule.name}-target">Target</label>
   </div>
 }
 
 @renderTypeRule(rule: TypeMapping) = {
   <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-    <input class="mdl-textfield__input" type="text" id="@{rule.name}-type" value="@rule.typeUri.serialize(context.project.config.prefixes)">
+    <input class="mdl-textfield__input type" type="text" id="@{rule.name}-type" value="@rule.typeUri.serialize(context.project.config.prefixes)">
     <label class="mdl-textfield__label" for="@{rule.name}-type">Type</label>
   </div>
 }
 
 @renderComplexRule(rule: ComplexMapping) = {
   <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-    <input class="mdl-textfield__input" type="text" id="@{rule.name}-source" value="@renderRulePath(rule)" readonly>
+    <input class="mdl-textfield__input source" type="text" id="@{rule.name}-source" value="@renderRulePath(rule)" readonly>
     <label class="mdl-textfield__label" for="@{rule.name}-source">Source Path</label>
   </div>
   <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-    <input class="mdl-textfield__input" type="text" id="@{rule.name}-target" value="@rule.target.map(_.serialize(prefixes())).getOrElse("")">
+    <input class="mdl-textfield__input target" type="text" id="@{rule.name}-target" value="@rule.target.map(_.serialize(prefixes())).getOrElse("")">
     <label class="mdl-textfield__label" for="@{rule.name}-target">Target Property</label>
   </div>
 }

@@ -86,7 +86,7 @@ function serializeRules() {
   // Collect all rules
   $("#ruleContainer").children(".transformRule").each(function() {
     // Read name
-    var name = $(this).find(".name").val();
+    var name = $(this).find(".rule-name").text();
     // Read source and target
     var source = $(this).find(".source").val();
     var target = $(this).find(".target").val();
