@@ -75,6 +75,19 @@
       Delete transformation rule?
     </p>
   </div>
+
+  <script type="text/javascript">
+    $("#ruleContainer .mdl-card").mouseenter(function() {
+      $(this).find(".rule-buttons").show();
+    });
+    $("#ruleContainer .mdl-card").mouseleave(function() {
+      $(this).find(".rule-buttons").hide();
+    });
+    $(".edit-button").click(function() {
+      var ruleName = $(this).parent().parent().find('.rule-name').text();
+      openRule(ruleName);
+    });
+  </script>
 }
 
 @renderRule(rule: TransformRule) = {
@@ -82,6 +95,7 @@
   <div class="mdl-card__title ruleTitle">
     <div class="rule-name">@rule.name</div>&nbsp;
     <div class="rule-type">(@rule.typeString Mapping)</div>
+    @renderRuleButtons()
   </div>
   <div class="mdl-card__supporting-text">
     <form action="#">
@@ -94,9 +108,9 @@
     }}
     </form>
   </div>
-  <div class="mdl-card__actions">
+  @*<div class="mdl-card__actions">
     @renderRuleButtons()
-  </div>
+  </div>*@
   <script class="ruleXML" type="application/xml">
     @XmlSerialization.toXml[TransformRule](rule)
   </script>
@@ -141,7 +155,7 @@
 
 @renderComplexRule(rule: ComplexMapping) = {
   <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-    <input class="mdl-textfield__input" type="text" id="@{rule.name}-source" value="@renderRulePath(rule)" disabled>
+    <input class="mdl-textfield__input" type="text" id="@{rule.name}-source" value="@renderRulePath(rule)" readonly>
     <label class="mdl-textfield__label" for="@{rule.name}-source">Source Path</label>
   </div>
   <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -151,12 +165,10 @@
 }
 
 @renderRuleButtons() = {
-  <button class="mdl-button mdl-js-button mdl-button--icon" onclick="openRule($(this).parent().parent().find('.name').val())">
-    <i class="material-icons">build</i>
-  </button>
-  <button class="mdl-button mdl-js-button mdl-button--icon" onclick="deleteRule($(this).parent().parent())">
-    <i class="material-icons">delete</i>
-  </button>
+  <div class="rule-buttons">
+    <div class="material-icons rule-button delete-button" onclick="deleteRule($(this).parent().parent())">delete</div>
+    <div class="material-icons rule-button edit-button">edit</div>
+  </div>
 }
 
 @renderRulePath(rule: ComplexMapping) = {@if(rule.paths.size == 1) {@rule.paths.head.serializeSimplified(prefixes())} else {(multiple)}}

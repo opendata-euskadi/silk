@@ -9,6 +9,30 @@
 
 #ruleContainer .mdl-card {
   margin: 0 10px 10px 0;
+  width: 400px;
+}
+
+#ruleContainer .mdl-textfield {
+  width: 365px;
+}
+
+#ruleContainer .mdl-textfield input {
+  font-size: 14px;
+}
+
+#ruleContainer .rule-button {
+  float: right;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+#ruleContainer .rule-buttons {
+  flex-grow: 2;
+  display: none;
+}
+
+.rule-buttons .delete-button {
+  color: #CB4335;
 }
 
 .transformRule {
@@ -22,7 +46,8 @@
   transition: background-color 0.25s ease-in;
 }
 
-.ruleTitle {
+.rule-name {
+  font-weight: bold;
 }
 
 .ruleContents {
