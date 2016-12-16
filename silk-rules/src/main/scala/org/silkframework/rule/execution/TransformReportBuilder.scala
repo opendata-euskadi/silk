@@ -1,5 +1,7 @@
 package org.silkframework.rule.execution
 
+import java.util.UUID
+
 import org.silkframework.entity.Entity
 import org.silkframework.rule.TransformRule
 import org.silkframework.rule.execution.TransformReport.{RuleError, RuleResult}
@@ -9,7 +11,9 @@ import org.silkframework.util.Identifier
   * A builder for generating transform reports.
   * Not thread safe!
   */
-private class TransformReportBuilder(rules: Seq[TransformRule]) {
+class TransformReportBuilder(rules: Seq[TransformRule]) extends Serializable {
+
+  val serialVersionUID = 1L
 
   private var entityCounter = 0L
 
@@ -40,6 +44,14 @@ private class TransformReportBuilder(rules: Seq[TransformRule]) {
 
   def incrementEntityErrorCounter(): Unit = {
     entityErrorCounter += 1
+  }
+
+  def incrementEntityCounter(value: Long): Unit = {
+    entityCounter += value
+  }
+
+  def incrementEntityErrorCounter(value: Long): Unit = {
+    entityErrorCounter += value
   }
 
   def build(): TransformReport = {
