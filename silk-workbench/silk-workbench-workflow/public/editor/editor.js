@@ -127,3 +127,17 @@ function removeElement(elementId) {
     $('#toolbox' + elementId.substring(elementId.indexOf("_"))).show();
   }, 100);
 }
+
+function loadWorkflowReport() {
+  $.getJSON(activityUrl + '/value', function(report) {
+    updateWorkflowReport(report);
+  });
+}
+
+function updateWorkflowReport(report) {
+  report.taskReports.forEach(function(taskReport) {
+    var operatorContent = $(".operator[title = '" + taskReport.task + "'] .operatorContent");
+    console.log(taskReport.summary);
+    operatorContent.html('XXX');
+  })
+}
