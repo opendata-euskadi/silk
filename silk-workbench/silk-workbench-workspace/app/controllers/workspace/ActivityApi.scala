@@ -8,12 +8,13 @@ import models.JsonError
 import org.silkframework.config.TaskSpec
 import org.silkframework.runtime.activity.{Activity, ActivityControl}
 import org.silkframework.runtime.serialization.{Serialization, WriteContext}
+import org.silkframework.util.Identifier
 import org.silkframework.workspace.activity.WorkspaceActivity
 import org.silkframework.workspace.{Project, ProjectTask, User}
 import play.api.libs.iteratee.Enumerator
 import play.api.libs.json.JsArray
 import play.api.mvc._
-
+import org.silkframework.util.StringUtils._
 import scala.language.existentials
 
 class ActivityApi extends Controller {
@@ -136,8 +137,19 @@ class ActivityApi extends Controller {
     Ok(JsArray(statuses))
   }
 
-  def activityLog() = Action {
-    Ok(JsonSerializer.logRecords(ActivityLog.records))
+  def activityLog(projectName: String, taskName: String, activityName: String) = Action {
+    val records = {
+      if(activityName.nonEmpty)
+        ActivityLog.activityRecords(projectName, taskName, activityName)
+      else if(taskName.nonEmpty)
+        ActivityLog.taskActivityRecords(projectName, taskName)
+      else if(projectName.nonEmpty)
+        ActivityLog.projectActivityRecords(projectName)
+      else
+        ActivityLog.records
+    }
+
+    Ok(JsonSerializer.logRecords(records))
   }
 
   def activityUpdates(projectName: String, taskName: String, activityName: String) = Action {
@@ -195,7 +207,7 @@ class ActivityApi extends Controller {
   */
 object ActivityLog extends java.util.logging.Handler {
 
-  private val size = 100
+  private val size = 1000
 
   private val buffer = Array.fill[LogRecord](size)(null)
 
@@ -222,6 +234,34 @@ object ActivityLog extends java.util.logging.Handler {
     for (i <- 0 until count) yield {
       buffer((start + i) % buffer.length)
     }
+  }
+
+  def projectActivityRecords(project: String): Seq[LogRecord] = {
+    def isProjectActivityLog(log: LogRecord): Boolean = {
+      val path = log.getLoggerName
+      val localPath = log.getLoggerName.substring(Activity.loggingPath.length + 1, path.lastIndexOf('.'))
+      localPath == project.toString
+    }
+
+    records.filter(isProjectActivityLog)
+  }
+
+  def taskActivityRecords(project: String, task: String): Seq[LogRecord] = {
+    def isTaskActivityLog(log: LogRecord): Boolean = {
+      val path = log.getLoggerName
+      val localPath = log.getLoggerName.substring(Activity.loggingPath.length + 1, path.lastIndexOf('.'))
+      localPath == project.toString + "." + task.toString
+    }
+
+    records.filter(isTaskActivityLog)
+  }
+
+  def activityRecords(project: String, task: String, activity: String): Seq[LogRecord] = {
+    def isActivityLog(log: LogRecord): Boolean = {
+      log.getLoggerName.stripPrefix(Activity.loggingPath) == "." + project.toString + "." + task.toString + "." + activity.upperCamelCase
+    }
+
+    records.filter(isActivityLog)
   }
 
   /**

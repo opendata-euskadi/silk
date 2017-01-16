@@ -4,8 +4,9 @@ import org.silkframework.runtime.activity.Status.Canceling
 
 private class ActivityExecution[T](activity: Activity[T],
                                    parent: Option[ActivityContext[_]] = None,
-                                   progressContribution: Double = 0.0) extends ActivityMonitor[T](activity.name, parent, progressContribution, activity.initialValue)
-                                                                       with Runnable with ActivityControl[T] {
+                                   progressContribution: Double = 0.0,
+                                   logPostfix: String = "") extends ActivityMonitor[T](activity.name, parent, progressContribution, activity.initialValue, logPostfix)
+                                                                with Runnable with ActivityControl[T] {
 
   /**
    * The name of the activity.

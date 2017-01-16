@@ -75,12 +75,16 @@ object Activity {
   val loggingPath = "org.silkframework.runtime.activity"
 
   /**
-   * Retrieves a control for an activity without executing it.
-   * The [ActivityControl] instance can be used to start the execution of the activity.
-   * After that it can be used to monitor the execution status as well as the current value and allows to request the cancellation of the execution.
+    * Retrieves a control for an activity without executing it.
+    * The [ActivityControl] instance can be used to start the execution of the activity.
+    * After that it can be used to monitor the execution status as well as the current value and allows to request the cancellation of the execution.
+    *
+    * @param activity The activity implementation.
+    * @param logPostfix A postfix attached to the logging path, e.g., projectActivities.taskActivities
+    *
    */
-  def apply[T](activity: Activity[T]): ActivityControl[T] = {
-    new ActivityExecution[T](activity)
+  def apply[T](activity: Activity[T], logPostfix: String = ""): ActivityControl[T] = {
+    new ActivityExecution[T](activity, logPostfix = logPostfix)
   }
 
   /**

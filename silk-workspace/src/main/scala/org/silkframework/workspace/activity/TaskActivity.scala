@@ -19,10 +19,13 @@ import scala.reflect.ClassTag
 class TaskActivity[DataType <: TaskSpec : ClassTag, ActivityType <: HasValue : ClassTag](val task: ProjectTask[DataType],
                                                                                          initialFactory: TaskActivityFactory[DataType, ActivityType])
     extends WorkspaceActivity {
+
   final val activityClassName = classOf[Activity[_]].getName
 
+  private val logPostfix = project.name.toString + "." + task.id.toString
+
   @volatile
-  private var currentControl = Activity(initialFactory(task))
+  private var currentControl = Activity(initialFactory(task), logPostfix)
 
   @volatile
   private var currentFactory = initialFactory
@@ -59,7 +62,7 @@ class TaskActivity[DataType <: TaskSpec : ClassTag, ActivityType <: HasValue : C
 
   private def recreateControl() = {
     val oldControl = currentControl
-    currentControl = Activity(currentFactory(task))
+    currentControl = Activity(currentFactory(task), logPostfix)
     // Keep subscribers
     for (subscriber <- oldControl.status.subscribers) {
       currentControl.status.onUpdate(subscriber)

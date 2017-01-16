@@ -1,5 +1,6 @@
 package org.silkframework.runtime.activity
 import java.util.logging.Logger
+import org.silkframework.util.StringUtils._
 
 /**
   * Holds the current status and value of an activity, but does not control its execution.
@@ -10,7 +11,11 @@ import java.util.logging.Logger
   * @param initialValue The initial value of this activity.
   * @tparam T The value type. Set to [[Unit]] if no values are generated.
   */
-class ActivityMonitor[T](name: String, parent: Option[ActivityContext[_]] = None, progressContribution: Double = 0.0, initialValue: => Option[T] = None) extends ActivityContext[T] {
+class ActivityMonitor[T](name: String,
+                         parent: Option[ActivityContext[_]] = None,
+                         progressContribution: Double = 0.0,
+                         initialValue: => Option[T] = None,
+                         logPostfix: String = "") extends ActivityContext[T] {
 
   /**
     * Holds all current child activities.
@@ -22,8 +27,11 @@ class ActivityMonitor[T](name: String, parent: Option[ActivityContext[_]] = None
     * Retrieves the logger to be used by the activity.
     */
   override val log: Logger = parent match {
-    case None => Logger.getLogger(Activity.loggingPath + "." + name)
-    case Some(p) => Logger.getLogger(p.log.getName + "." + name)
+    case None =>
+      val loggingPath = Activity.loggingPath + "." + logPostfix.stripPrefix(".").stripSuffix(".") + "." + name.upperCamelCase
+      Logger.getLogger(loggingPath)
+    case Some(p) =>
+      Logger.getLogger(p.log.getName + "." + name.upperCamelCase)
   }
 
   /**

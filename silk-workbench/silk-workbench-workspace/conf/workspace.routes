@@ -116,7 +116,7 @@ GET           /activities/config                                                
 POST          /activities/config                                                controllers.workspace.ActivityApi.postActivityConfig(project: String, task: String, activity: String)
 GET           /activities/status                                                controllers.workspace.ActivityApi.getActivityStatus(project: String, task: String, activity: String)
 GET           /activities/recent                                                controllers.workspace.ActivityApi.recentActivities(maxCount: Int ?= 10)
-GET           /activities/log                                                   controllers.workspace.ActivityApi.activityLog()
+GET           /activities/log                                                   controllers.workspace.ActivityApi.activityLog(project: String ?= "", task: String ?= "", activity: String ?= "")
 GET           /activities/updates                                               controllers.workspace.ActivityApi.activityUpdates(project: String, task: String, activity: String)
 
 ############################################################################################################################################

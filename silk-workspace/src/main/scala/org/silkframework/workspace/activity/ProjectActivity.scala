@@ -7,7 +7,7 @@ import org.silkframework.workspace.Project
 class ProjectActivity(override val project: Project, initialFactory: ProjectActivityFactory[_]) extends WorkspaceActivity {
 
   @volatile
-  private var currentControl: ActivityControl[_] = Activity(initialFactory(project))
+  private var currentControl: ActivityControl[_] = Activity(initialFactory(project), project.name)
 
   @volatile
   private var currentFactory = initialFactory
@@ -31,7 +31,7 @@ class ProjectActivity(override val project: Project, initialFactory: ProjectActi
     implicit val prefixes = project.config.prefixes
     implicit val resources = project.resources
     currentFactory = PluginDescription(currentFactory.getClass)(config)
-    currentControl = Activity(currentFactory(project))
+    currentControl = Activity(currentFactory(project), project.name)
     // Keep subscribers
     for(subscriber <- oldControl.status.subscribers) {
       currentControl.status.onUpdate(subscriber)
