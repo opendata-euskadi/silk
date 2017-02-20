@@ -35,10 +35,17 @@ class DefaultConfig extends Config {
     this.synchronized {
       ConfigFactory.invalidateCaches()
       var fullConfig = ConfigFactory.load()
+
       // Check if we are running as part of the eccenca Linked Data Suite
       if (fullConfig.hasPath("elds.home") || System.getenv("ELDS_HOME")!=null) {
-        val eldsHome = fullConfig.getString("elds.home")
+        val eldsHome = if (fullConfig.hasPath("elds.home")) {
+          fullConfig.getString("elds.home")
+        }
+        else {
+          ""
+        }
         val eldsHomeEnv = System.getenv("ELDS_HOME")
+
         // Since elds.home is defined, the config should exist in the location given in elds.home or ELDS_HOME
         val configFile = if (new File(eldsHome + "/etc/dataintegration/dataintegration.conf").exists) {
           log.info(s"Configuration file found at $eldsHome:/etc/dataintegration/dataintegration.conf")
@@ -84,6 +91,8 @@ class DefaultConfig extends Config {
       fullConfig.resolve()
     }
   }
+
+
 
   def apply(): TypesafeConfig = {
     this.synchronized {
