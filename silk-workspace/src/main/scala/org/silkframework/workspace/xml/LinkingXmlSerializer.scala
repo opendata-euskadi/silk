@@ -74,6 +74,6 @@ private class LinkingXmlSerializer extends XmlSerializer[LinkSpec] {
     // Write resources
     val taskResources = resources.child(data.id)
     taskResources.get("linkSpec.xml").write(toXml(data).toString())
-    taskResources.get("alignment.xml").write{ os => data.referenceLinks.toXML.write(os) }
+    taskResources.get("alignment.xml").write{ os => data.referenceLinks.toXML.write(os, prettyPrint = true) }
   }
 }

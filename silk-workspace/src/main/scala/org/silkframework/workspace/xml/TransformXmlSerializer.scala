@@ -31,7 +31,7 @@ private class TransformXmlSerializer extends XmlSerializer[TransformSpec] {
     //Don't use any prefixes
     implicit val prefixes = Prefixes.empty
 
-    taskResources.get("dataset.xml").write { os => data.selection.toXML(asSource = true).write(os) }
+    taskResources.get("dataset.xml").write { os => data.selection.toXML(asSource = true).write(os, prettyPrint = true) }
     taskResources.get("rules.xml").write(toXml(data).toString())
   }
 

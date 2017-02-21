@@ -32,29 +32,32 @@ object XMLUtils {
 class XMLUtils(xml: NodeSeq) {
   def toFormattedString = {
     val stringWriter = new StringWriter()
-    write(stringWriter)
+    write(stringWriter, prettyPrint = true)
     stringWriter.toString
   }
 
-  def write(file: File) {
+  def write(file: File, prettyPrint: Boolean) {
     val fileWriter = new OutputStreamWriter(new FileOutputStream(file), "UTF-8")
     try {
-      write(fileWriter)
+      write(fileWriter, prettyPrint)
     }
     finally {
       fileWriter.close()
     }
   }
 
-  def write(writer: Writer) {
-    val printer = new PrettyPrinter(Int.MaxValue, 2)
-
-    writer.write(printer.formatNodes(xml))
+  def write(writer: Writer, prettyPrint: Boolean) {
+    if(prettyPrint) {
+      val printer = new PrettyPrinter(Int.MaxValue, 2)
+      writer.write(printer.formatNodes(xml))
+    } else {
+      writer.write(xml.toString())
+    }
     writer.write("\n")
     writer.flush()
   }
 
-  def write(outputStream: OutputStream) {
-    write(new OutputStreamWriter(outputStream, "UTF-8"))
+  def write(outputStream: OutputStream, prettyPrint: Boolean) {
+    write(new OutputStreamWriter(outputStream, "UTF-8"), prettyPrint)
   }
 }
